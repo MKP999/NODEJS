@@ -1,6 +1,9 @@
 const express = require('express')
 const dotenv = require('dotenv')
 
+// 引入mscamps 路由
+const mscamps = require('./routes/mscamps')
+
 dotenv.config({
     path: './config/config.env'
 })
@@ -10,6 +13,9 @@ const app = express()
 app.get('/', (req,res) => {
     res.send('hello')
 })
+
+// 使用 mscamps路由
+app.use('/api/v1/mscamps', mscamps)
 
 const PORT = process.env.PORT || 3000
 
