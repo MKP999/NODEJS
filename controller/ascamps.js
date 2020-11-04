@@ -1,10 +1,17 @@
+const Mscamp = require("../modles/mscamps");
+
 /**
  * @desc    获取米修所有数据
  * @route   GET /api/v1/mscamps
  * @access  公开的
  */
-exports.getMscamps = (req, res, next) => {
-    res.status(200).json({msg: '获取全部列表'})
+exports.getMscamps = async (req, res, next) => {
+    try {
+        const mscamps = await new Mscamp.find()
+        res.status(200).json({success: true, data: mscamps})
+    } catch (error) {
+        res.status(400).json({success:false, data: error})
+    }
 } 
 
 /**
@@ -12,8 +19,14 @@ exports.getMscamps = (req, res, next) => {
  * @route   POST /api/v1/mscamps
  * @access  公开的
  */
-exports.createMscamp = (req, res, next) => {
-    res.status(200).json({msg: '添加单个数据'})
+exports.createMscamp = async (req, res, next) => {
+    try {
+        console.log(req.body)
+        const mscamps = await new Mscamp(req.body)
+        res.status(200).json({success: true, data: mscamps})
+    } catch (error) {
+        res.status(400).json({success:false, data: error})
+    }
 }
 
 /**
