@@ -10,10 +10,6 @@ dotenv.config({
 
 const app = express()
 
-app.get('/', (req,res) => {
-    res.send('hello')
-})
-
 // 使用 mscamps路由
 app.use('/api/v1/mscamps', mscamps)
 
