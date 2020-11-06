@@ -9,6 +9,11 @@ const connectDB = require('./config/db')
 // 引入mscamps 路由
 const mscamps = require('./routes/mscamps')
 
+// 引入error报错中间件
+const errorHandler = require('./middleware/error')
+// 引入异步处理中间件
+const asyncHandler = require('./middleware/async')
+
 dotenv.config({
     path: './config/config.env'
 })
@@ -26,6 +31,10 @@ app.use(morgan('dev'))
 
 // 使用 mscamps路由
 app.use('/api/v1/mscamps', mscamps)
+
+// 一定要在路由绑定后使用
+app.use(errorHandler)
+app.use(asyncHandler)
 
 const PORT = process.env.PORT || 3000
 
