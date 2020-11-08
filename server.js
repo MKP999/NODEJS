@@ -3,11 +3,15 @@ const dotenv = require('dotenv')
 // 中间件
 const morgan = require('morgan')
 const colors = require('colors')
+const cookieParser = require("cookie-parser")
+
 // 引入数据库
 const connectDB = require('./config/db')
 
-// 引入mscamps 路由
+// 引入路由 
 const mscamps = require('./routes/mscamps')
+const courses = require('./routes/courses')
+const auth = require('./routes/auth')
 
 // 引入error报错中间件
 const errorHandler = require('./middleware/error')
@@ -29,8 +33,13 @@ app.use(express.json())
 // 使用morgan 中间件 仅在开发环境打印
 app.use(morgan('dev'))
 
-// 使用 mscamps路由
+// 使用cookie中间件
+app.use(cookieParser())
+
+// 使用路由
 app.use('/api/v1/mscamps', mscamps)
+app.use('/api/v1/courses', courses)
+app.use('/api/v1/auth', auth)
 
 // 一定要在路由绑定后使用
 app.use(errorHandler)

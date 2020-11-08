@@ -10,14 +10,7 @@ const asyncHandler = require('../middleware/async')
  * @access  公开的
  */
 exports.getMscamps = asyncHandler(async (req, res, next) => {
-        // const query = req.query
-        // let query = await Mscamp.find(req.query)
-        // if (req.query.select) {
-        //    const fields = req.query.select.split(',').join(' ')
-        //    query = query.select(fields)   
-        // }
-        const mscamps = await Mscamp.find(req.query)
-        res.status(200).json({success: true, data: mscamps})
+        res.status(200).json(res.advancedResults)
 })
 
 /**
@@ -74,13 +67,15 @@ exports.updateMscamp = asyncHandler(async (req, res, next) => {
  * @access  公开的
  */
 exports.deleteMscamp = asyncHandler(async (req, res, next) => {
-        const mscamp = await Mscamp.findByIdAndRemove(req.params.id)
+        const mscamp = await Mscamp.findById(req.params.id)
 
         if (!mscamp) {
             return next(
                 new ErrorResponse(`Resource not found with id of ${req.params.id}`, 404)
               );
         }
+
+        mscamp.remove()
 
         res.status(200).json({success: true, data: {}})
 })
