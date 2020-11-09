@@ -10,10 +10,13 @@ router.route('/:mscampsID/courses').get(getCourses).post(createCourse)
 const advancedResults = require('../middleware/advancedResults')
 const Mscamp = require('../modles/mscamps')
 
+// 路由鉴权 角色路由
+const { protect, authorize } = require('../middleware/auth')
+
 // http://localhost:5000/api/v1/mscamps
-router.route('/').get(advancedResults(Mscamp, 'courses'), getMscamps).post(createMscamp)
+router.route('/').get(advancedResults(Mscamp, 'courses'), getMscamps).post(protect, authorize('admin', 'user'), createMscamp)
 
 // http://localhost:5000/api/v1/mscamps/:id
-router.route('/:id').get(getMscamp).put(updateMscamp).delete(deleteMscamp)
+router.route('/:id').get(getMscamp).put(protect, authorize('admin', 'user'), updateMscamp).delete(protect, authorize('admin', 'user'), deleteMscamp)
 
 module.exports = router

@@ -47,9 +47,18 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
   // 判断是否有该培训营
   if (!mscamp) {
     return next(
-      new ErrorResponse(`Resource not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`Resource not found with id of ${req.user.id}`, 404)
     );
   }
+
+  // 路由守卫  限制非admin 非本身创建的数据不能修改
+  if(mscamp.user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`该用户${req.user.id}没有权限创建此数据`, 401))
+}
+
+    // 添加培训营id 用户id
+    req.body.mscamp = req.params.mscampsID
+    req.body.user = req.user.id
 
   // 如果有 则添加课程进入该培训营
   const course = await Courses.create(req.body)
@@ -63,14 +72,19 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
  * @access  私有的
  */
 exports.updateCourse = asyncHandler(async (req, res, next) => {
-  console.log(req.params.id, req.body)
   let course = await Courses.findById(req.params.id);
-  console.log(course)
+
+  // 没有找到
   if (!course) {
     return next(
       new ErrorResponse(`Resource not found with id of ${req.params.id}`, 404)
     );
   }
+
+  // 路由守卫  限制非admin 非本身创建的数据不能修改
+  if(course.user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`该用户${req.params.id}没有权限修改此数据`, 401))
+}
 
   course = await Courses.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
@@ -88,11 +102,17 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
 exports.deleteCourse = asyncHandler(async (req, res, next) => {
   const course = await Courses.findById(req.params.id)
 
+  // 没有找到
   if (!course) {
       return next(
           new ErrorResponse(`Resource not found with id of ${req.params.id}`, 404)
         );
   }
+
+  // 路由守卫  限制非admin 非本身创建的数据不能修改
+  if(course.user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(new ErrorResponse(`该用户${req.params.id}没有权限修改此数据`, 401))
+}
 
   course.remove()
 

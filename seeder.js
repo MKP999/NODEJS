@@ -11,6 +11,7 @@ dotenv.config({
 // 引入数据库构造器
 const Mscamp = require('./modles/mscamps')
 const Courses = require('./modles/courses')
+const Users = require('./modles/users')
 const { json } = require('express')
 
 // 连接数据库
@@ -24,12 +25,14 @@ mongoose.connect(process.env.NET_MONGO_URI, {
 // 读取本地数据
 const mscamps = JSON.parse(fs.readFileSync(`${__dirname}/_data/mscamps.json`, "utf-8"))
 const courses = JSON.parse(fs.readFileSync(`${__dirname}/_data/courses.json`, "utf-8"))
+const users = JSON.parse(fs.readFileSync(`${__dirname}/_data/users.json`, "utf-8"))
 
 // 数据导入到 mongoose数据库
 const importData = async () => {
     try {
         await Mscamp.create(mscamps)
         await Courses.create(courses)
+        await Users.create(users)
         console.log('数据存储成功'.green.inverse)
         process.exit()
     } catch (error) {
@@ -42,6 +45,7 @@ const deleteData = async () => {
     try {
         await Mscamp.deleteMany()
         await Courses.deleteMany()
+        await Users.deleteMany()
         console.log('数据删除成功'.red.inverse)
         process.exit()
     } catch (error) {
