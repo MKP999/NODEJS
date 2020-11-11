@@ -12,6 +12,8 @@ const connectDB = require('./config/db')
 const mscamps = require('./routes/mscamps')
 const courses = require('./routes/courses')
 const auth = require('./routes/auth')
+const users = require('./routes/users')
+const reviews = require('./routes/reviews')
 
 // 引入error报错中间件
 const errorHandler = require('./middleware/error')
@@ -40,6 +42,8 @@ app.use(cookieParser())
 app.use('/api/v1/mscamps', mscamps)
 app.use('/api/v1/courses', courses)
 app.use('/api/v1/auth', auth)
+app.use('/api/v1/users', users)
+app.use('/api/v1/reviews', reviews)
 
 // 一定要在路由绑定后使用
 app.use(errorHandler)
