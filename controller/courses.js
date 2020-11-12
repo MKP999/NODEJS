@@ -52,7 +52,7 @@ exports.createCourse = asyncHandler(async (req, res, next) => {
   }
 
   // 路由守卫  限制非admin 非本身创建的数据不能修改
-  if(mscamp.user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+  if(mscamp.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(new ErrorResponse(`该用户${req.user.id}没有权限创建此数据`, 401))
 }
 
@@ -82,7 +82,7 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
   }
 
   // 路由守卫  限制非admin 非本身创建的数据不能修改
-  if(course.user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+  if(course.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(new ErrorResponse(`该用户${req.params.id}没有权限修改此数据`, 401))
 }
 
@@ -110,7 +110,7 @@ exports.deleteCourse = asyncHandler(async (req, res, next) => {
   }
 
   // 路由守卫  限制非admin 非本身创建的数据不能修改
-  if(course.user.id.toString() !== req.user.id && req.user.role !== 'admin') {
+  if(course.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(new ErrorResponse(`该用户${req.params.id}没有权限修改此数据`, 401))
 }
 

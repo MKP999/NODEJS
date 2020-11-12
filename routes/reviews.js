@@ -1,7 +1,7 @@
 const express = require('express')
 // 合并路由 mergeParams
 const router = express.Router({ mergeParams: true})
-const { getReviews } = require('../controller/reviews')
+const { getReviews, getReview ,createReviews, updateReview, deleteReviews } = require('../controller/reviews')
 
 // 高级查询方法中间件引入
 const advancedResults = require('../middleware/advancedResults')
@@ -14,6 +14,8 @@ const { protect, authorize } = require('../middleware/auth')
 router.route('/').get(advancedResults(Reviews, {
   path: 'mscamp',
   select: 'name description'
-}), getReviews)
+}), getReviews).post(protect, authorize('admin', 'user'), createReviews)
+
+router.route('/:id').get(protect, authorize('admin', 'user'), getReview).put(protect, authorize('admin', 'user'), updateReview).delete(protect, authorize('admin', 'user'), deleteReviews)
 
 module.exports = router
